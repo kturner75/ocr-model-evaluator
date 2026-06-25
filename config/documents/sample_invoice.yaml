@@ -1,0 +1,5 @@
+description: Programmatically generated invoice for testing
+doc_type: invoice
+file_path: /Users/kevinturner/CursorProjects/ocr-model-evaluator/documents/sample_invoice.pdf
+id: sample_invoice
+name: 'Sample Invoice #1001'

@@ -1,0 +1,17 @@
+id: invoice_extract
+name: "Invoice Extraction Prompt"
+doc_type: invoice
+description: "Extract structured data from an invoice image"
+template: |
+  You are a document extraction assistant. Analyze the provided invoice image(s)
+  and extract all relevant information into the following JSON structure.
+
+  Required JSON Schema:
+  {schema_json}
+
+  Instructions:
+  - Extract all visible fields from the invoice
+  - For monetary values, use numbers without currency symbols
+  - For dates, use YYYY-MM-DD format
+  - Return ONLY valid JSON matching the schema, no additional text
+  - If a field is not visible, omit it from the response

@@ -1,0 +1,36 @@
+{
+  "id": "invoice",
+  "name": "Invoice Schema",
+  "doc_type": "invoice",
+  "description": "Standard invoice extraction schema",
+  "json_schema": {
+    "type": "object",
+    "properties": {
+      "invoice_number": {"type": "string"},
+      "invoice_date": {"type": "string"},
+      "due_date": {"type": "string"},
+      "vendor_name": {"type": "string"},
+      "vendor_address": {"type": "string"},
+      "bill_to_name": {"type": "string"},
+      "bill_to_address": {"type": "string"},
+      "line_items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "description": {"type": "string"},
+            "quantity": {"type": "number"},
+            "unit_price": {"type": "number"},
+            "amount": {"type": "number"}
+          },
+          "required": ["description", "quantity", "unit_price", "amount"]
+        }
+      },
+      "subtotal": {"type": "number"},
+      "tax_rate": {"type": "number"},
+      "tax_amount": {"type": "number"},
+      "total": {"type": "number"}
+    },
+    "required": ["invoice_number", "invoice_date", "vendor_name", "line_items", "total"]
+  }
+}
