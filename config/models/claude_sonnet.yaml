@@ -1,0 +1,7 @@
+id: claude_sonnet
+name: "Claude Sonnet 4.6"
+provider: litellm
+model_id: "anthropic/claude-sonnet-4-6"
+parameters:
+  temperature: 0.0
+  max_tokens: 4096
