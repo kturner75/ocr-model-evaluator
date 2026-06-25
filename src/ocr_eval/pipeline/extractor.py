@@ -120,3 +120,23 @@ def run_extraction(
         save_result(error_result)
         update_run(run.id, RunStatus.FAILED, finished_at=datetime.now(timezone.utc).isoformat())
         return error_result
+
+
+def run_batch_extraction(
+    document_ids: list[str],
+    schema_id: str,
+    prompt_id: str,
+    model_ids: list[str],
+    progress_callback=None,
+) -> list[Result]:
+    total = len(document_ids) * len(model_ids)
+    results = []
+    step = 0
+    for model_id in model_ids:
+        for document_id in document_ids:
+            step += 1
+            if progress_callback:
+                progress_callback(step, total, model_id, document_id)
+            result = run_extraction(document_id, schema_id, prompt_id, model_id)
+            results.append(result)
+    return results

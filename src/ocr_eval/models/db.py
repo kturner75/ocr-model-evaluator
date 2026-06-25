@@ -144,3 +144,95 @@ def list_runs(limit: int = 50) -> list[Run]:
     with _get_conn() as conn:
         rows = conn.execute("SELECT * FROM runs ORDER BY created_at DESC LIMIT ?", (limit,)).fetchall()
     return [_row_to_run(r) for r in rows]
+
+
+def get_latest_results_by_model(model_ids: list[str], document_ids: list[str] | None = None) -> list[dict]:
+    with _get_conn() as conn:
+        placeholders = ",".join("?" * len(model_ids))
+        query = f"""
+            SELECT r.*, res.*,
+                   r.model_id as r_model_id, r.document_id as r_document_id
+            FROM runs r
+            JOIN results res ON res.run_id = r.id
+            WHERE r.model_id IN ({placeholders})
+              AND r.status = 'completed'
+        """
+        params: list = list(model_ids)
+
+        if document_ids:
+            doc_placeholders = ",".join("?" * len(document_ids))
+            query += f" AND r.document_id IN ({doc_placeholders})"
+            params.extend(document_ids)
+
+        query += """
+            AND r.created_at = (
+                SELECT MAX(r2.created_at) FROM runs r2
+                WHERE r2.model_id = r.model_id
+                  AND r2.document_id = r.document_id
+                  AND r2.status = 'completed'
+            )
+            ORDER BY r.model_id, r.document_id
+        """
+        rows = conn.execute(query, params).fetchall()
+
+    results = []
+    for row in rows:
+        results.append({
+            "model_id": row["r_model_id"],
+            "document_id": row["r_document_id"],
+            "accuracy_score": row["accuracy_score"] or 0.0,
+            "wall_clock_seconds": row["wall_clock_seconds"] or 0.0,
+            "input_tokens": row["input_tokens"] or 0,
+            "output_tokens": row["output_tokens"] or 0,
+            "total_tokens": row["total_tokens"] or 0,
+            "is_valid": bool(row["is_valid"]),
+            "error_message": row["error_message"],
+            "extracted_json": json.loads(row["extracted_json"]) if row["extracted_json"] else None,
+            "created_at": row["created_at"],
+        })
+    return results
+
+
+def get_distinct_model_ids() -> list[str]:
+    with _get_conn() as conn:
+        rows = conn.execute(
+            "SELECT DISTINCT model_id FROM runs WHERE status = 'completed' ORDER BY model_id"
+        ).fetchall()
+    return [r["model_id"] for r in rows]
+
+
+def get_distinct_document_ids() -> list[str]:
+    with _get_conn() as conn:
+        rows = conn.execute(
+            "SELECT DISTINCT document_id FROM runs WHERE status = 'completed' ORDER BY document_id"
+        ).fetchall()
+    return [r["document_id"] for r in rows]
+
+
+def export_results(run_ids: list[str] | None = None) -> list[dict]:
+    with _get_conn() as conn:
+        if run_ids:
+            placeholders = ",".join("?" * len(run_ids))
+            query = f"""
+                SELECT r.model_id, r.document_id, r.schema_id, r.prompt_id,
+                       r.status, r.created_at as run_created_at,
+                       res.accuracy_score, res.wall_clock_seconds,
+                       res.input_tokens, res.output_tokens, res.total_tokens,
+                       res.is_valid, res.error_message, res.extracted_json
+                FROM runs r LEFT JOIN results res ON res.run_id = r.id
+                WHERE r.id IN ({placeholders})
+                ORDER BY r.created_at DESC
+            """
+            rows = conn.execute(query, run_ids).fetchall()
+        else:
+            rows = conn.execute("""
+                SELECT r.model_id, r.document_id, r.schema_id, r.prompt_id,
+                       r.status, r.created_at as run_created_at,
+                       res.accuracy_score, res.wall_clock_seconds,
+                       res.input_tokens, res.output_tokens, res.total_tokens,
+                       res.is_valid, res.error_message, res.extracted_json
+                FROM runs r LEFT JOIN results res ON res.run_id = r.id
+                ORDER BY r.created_at DESC
+            """).fetchall()
+
+    return [dict(row) for row in rows]

@@ -1,0 +1,7 @@
+id: gpt4o_mini
+name: "GPT-4o Mini"
+provider: litellm
+model_id: "gpt-4o-mini"
+parameters:
+  temperature: 0.0
+  max_tokens: 4096
