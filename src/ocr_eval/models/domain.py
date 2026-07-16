@@ -10,7 +10,13 @@ class RunStatus(Enum):
     FAILED = "failed"
 
 
-MISSING = object()
+class _MissingType:
+    """Sentinel for fields absent from expected or actual JSON during comparison."""
+    __slots__ = ()
+    def __repr__(self) -> str:
+        return "MISSING"
+
+MISSING = _MissingType()
 
 
 @dataclass

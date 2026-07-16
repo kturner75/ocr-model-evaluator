@@ -1,0 +1,8 @@
+id: glm_ocr
+name: "GLM-OCR (Ollama)"
+provider: litellm
+model_id: "ollama/glm-ocr"
+api_base: "http://localhost:11434"
+parameters:
+  temperature: 0.0
+  max_tokens: 2048

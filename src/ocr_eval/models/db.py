@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime, timezone
 
 from ocr_eval.config import DB_PATH
-from ocr_eval.models.domain import FieldResult, Result, Run, RunStatus
+from ocr_eval.models.domain import MISSING, _MissingType, FieldResult, Result, Run, RunStatus
 
 _CREATE_TABLES = """
 CREATE TABLE IF NOT EXISTS runs (
@@ -83,9 +83,13 @@ def update_run(run_id: str, status: RunStatus, started_at: str | None = None, fi
         conn.execute(f"UPDATE runs SET {', '.join(parts)} WHERE id = ?", params)
 
 
+def _ser(v):
+    return None if isinstance(v, _MissingType) else v
+
+
 def save_result(result: Result) -> None:
     field_results_json = json.dumps(
-        [{"field_path": fr.field_path, "expected_value": fr.expected_value, "actual_value": fr.actual_value, "match": fr.match}
+        [{"field_path": fr.field_path, "expected_value": _ser(fr.expected_value), "actual_value": _ser(fr.actual_value), "match": fr.match}
          for fr in result.field_results]
     )
     with _get_conn() as conn:

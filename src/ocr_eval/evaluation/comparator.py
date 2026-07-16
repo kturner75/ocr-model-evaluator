@@ -1,4 +1,4 @@
-from ocr_eval.models.domain import FieldResult, MISSING
+from ocr_eval.models.domain import FieldResult, MISSING, _MissingType
 
 
 def _try_numeric(value):
@@ -14,7 +14,7 @@ def _try_numeric(value):
 
 
 def _values_match(expected, actual) -> bool:
-    if expected is MISSING or actual is MISSING:
+    if isinstance(expected, _MissingType) or isinstance(actual, _MissingType):
         return False
     if expected is None and actual is None:
         return True

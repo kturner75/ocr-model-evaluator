@@ -1,0 +1,24 @@
+id: invoice_extract_glm
+name: "Invoice Extraction (GLM-OCR)"
+doc_type: invoice
+description: "Field-list style prompt for GLM-OCR — avoids embedding schema JSON which causes the model to echo it back"
+template: |
+  Text Recognition:
+
+  Extract the following fields from this invoice image and return a single JSON object. No explanation, no extra text — only JSON.
+
+  Fields to extract:
+  - line_items (array of objects, each with fields: description, quantity, unit_price, amount)
+  - invoice_number (string)
+  - invoice_date (string, YYYY-MM-DD)
+  - due_date (string, YYYY-MM-DD)
+  - vendor_name (string)
+  - vendor_address (string)
+  - bill_to_name (string)
+  - bill_to_address (string)
+  - subtotal (number, no currency symbol)
+  - total (number, no currency symbol)
+  - tax_rate (number, percentage value e.g. 8.25)
+  - tax_amount (number, no currency symbol)
+
+  JSON:
