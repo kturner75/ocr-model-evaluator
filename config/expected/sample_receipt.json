@@ -1,0 +1,55 @@
+{
+  "document_id": "sample_receipt",
+  "schema_id": "receipt",
+  "expected": {
+    "merchant_name": "Corner Market Grocery",
+    "merchant_address": "77 Pine Street, Denver, CO 80202",
+    "receipt_number": "R-88421",
+    "transaction_date": "2024-09-12",
+    "transaction_time": "14:37",
+    "cashier_id": "C12",
+    "payment_method": "Visa ****4242",
+    "line_items": [
+      {
+        "description": "Organic Bananas 1lb",
+        "quantity": 2,
+        "unit_price": 0.69,
+        "amount": 1.38
+      },
+      {
+        "description": "Whole Milk 1gal",
+        "quantity": 1,
+        "unit_price": 3.99,
+        "amount": 3.99
+      },
+      {
+        "description": "Sourdough Loaf",
+        "quantity": 1,
+        "unit_price": 4.5,
+        "amount": 4.5
+      },
+      {
+        "description": "Large Eggs Dozen",
+        "quantity": 1,
+        "unit_price": 5.29,
+        "amount": 5.29
+      },
+      {
+        "description": "Ground Coffee 12oz",
+        "quantity": 1,
+        "unit_price": 9.99,
+        "amount": 9.99
+      },
+      {
+        "description": "Paper Towels 6pk",
+        "quantity": 1,
+        "unit_price": 12.49,
+        "amount": 12.49
+      }
+    ],
+    "subtotal": 37.64,
+    "tax_rate": 8.81,
+    "tax_amount": 3.32,
+    "total": 40.96
+  }
+}

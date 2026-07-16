@@ -1,0 +1,5 @@
+id: sample_purchase_order
+name: 'Sample Purchase Order #77801'
+doc_type: purchase_order
+file_path: documents/sample_purchase_order.pdf
+description: Purchase order with ship-to, payment terms, and item numbers

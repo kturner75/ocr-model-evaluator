@@ -1,0 +1,50 @@
+{
+  "document_id": "sample_purchase_order",
+  "schema_id": "purchase_order",
+  "expected": {
+    "po_number": "PO-77801",
+    "po_date": "2024-03-18",
+    "buyer_name": "Lakeside Manufacturing LLC",
+    "buyer_address": "1500 Industrial Parkway, Milwaukee, WI 53201",
+    "vendor_name": "Summit Components Inc",
+    "vendor_address": "42 Ridge Road, Chicago, IL 60601",
+    "ship_to_name": "Lakeside Dock 3 Receiving",
+    "ship_to_address": "1500 Industrial Parkway, Gate B, Milwaukee, WI 53201",
+    "requested_delivery_date": "2024-04-01",
+    "payment_terms": "Net 30",
+    "line_items": [
+      {
+        "item_number": "SC-100",
+        "description": "Servo Motor 2kW",
+        "quantity": 3,
+        "unit_price": 420.0,
+        "amount": 1260.0
+      },
+      {
+        "item_number": "SC-214",
+        "description": "Encoder Cable 5m",
+        "quantity": 6,
+        "unit_price": 48.5,
+        "amount": 291.0
+      },
+      {
+        "item_number": "SC-330",
+        "description": "Mounting Flange Kit",
+        "quantity": 3,
+        "unit_price": 75.0,
+        "amount": 225.0
+      },
+      {
+        "item_number": "SC-441",
+        "description": "Drive Firmware License",
+        "quantity": 1,
+        "unit_price": 199.0,
+        "amount": 199.0
+      }
+    ],
+    "subtotal": 1975.0,
+    "tax_amount": 0.0,
+    "shipping_amount": 45.0,
+    "total": 2020.0
+  }
+}

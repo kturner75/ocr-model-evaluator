@@ -1,0 +1,18 @@
+id: receipt_extract
+name: "Receipt Extraction Prompt"
+doc_type: receipt
+description: "Extract structured data from a retail receipt image"
+template: |
+  You are a document extraction assistant. Analyze the provided receipt image(s)
+  and extract all relevant information into the following JSON structure.
+
+  Required JSON Schema:
+  {schema_json}
+
+  Instructions:
+  - Extract all visible fields from the receipt
+  - For monetary values, use numbers without currency symbols
+  - For dates, use YYYY-MM-DD format
+  - For times, use HH:MM 24-hour format when possible
+  - Return ONLY valid JSON matching the schema, no additional text
+  - If a field is not visible, omit it from the response

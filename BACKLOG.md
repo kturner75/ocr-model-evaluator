@@ -32,11 +32,13 @@
 ## Up Next
 
 ### Goal 3: Real-World Testing & More Models
-- [ ] Add real-world sample documents (scanned invoices, faxes, receipts)
+- [x] Expand sample suite beyond single invoice (receipt, purchase order, multi-page invoice)
+- [x] Schemas + prompts per document type; batch runs resolve schema/prompt by doc_type
+- [ ] Add harder real-world samples (scanned/degraded, fax-style, handwritten annotations)
 - [ ] Add Ollama local model configs for open-source comparison
 - [ ] Add Mistral model config
 - [ ] Add Deepseek model config
-- [ ] Test with multi-page PDFs
+
 
 ### Goal 4: Custom Provider Adapters
 - [ ] Implement provider adapter for Baidu Unlimited OCR

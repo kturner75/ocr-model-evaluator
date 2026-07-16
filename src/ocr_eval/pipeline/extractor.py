@@ -15,10 +15,49 @@ from ocr_eval.pipeline.provider import LiteLLMProvider
 from ocr_eval.stores.document_store import get_document
 from ocr_eval.stores.expected_store import get_expected
 from ocr_eval.stores.model_store import get_model
-from ocr_eval.stores.prompt_store import render_prompt
-from ocr_eval.stores.schema_store import get_schema
+from ocr_eval.stores.prompt_store import get_prompt, list_prompts, render_prompt
+from ocr_eval.stores.schema_store import get_schema, list_schemas
 
 _provider = LiteLLMProvider()
+
+
+def resolve_schema_id(document_id: str, preferred_schema_id: str | None = None) -> str:
+    """Pick a schema for the document; use preferred when it matches doc_type."""
+    document = get_document(document_id)
+    if not document:
+        raise ValueError(f"Document not found: {document_id}")
+
+    if preferred_schema_id:
+        schema = get_schema(preferred_schema_id)
+        if schema and schema.doc_type == document.doc_type:
+            return preferred_schema_id
+
+    for schema in list_schemas():
+        if schema.doc_type == document.doc_type:
+            return schema.id
+
+    raise ValueError(f"No schema configured for doc_type={document.doc_type!r}")
+
+
+def resolve_prompt_id(document_id: str, preferred_prompt_id: str | None = None) -> str:
+    """Pick a prompt for the document; use preferred when it matches doc_type."""
+    document = get_document(document_id)
+    if not document:
+        raise ValueError(f"Document not found: {document_id}")
+
+    if preferred_prompt_id:
+        prompt = get_prompt(preferred_prompt_id)
+        if prompt and prompt.doc_type == document.doc_type:
+            return preferred_prompt_id
+
+    # Prefer standard extract prompts over model-specific variants (e.g. *_glm)
+    candidates = [p for p in list_prompts() if p.doc_type == document.doc_type]
+    if not candidates:
+        raise ValueError(f"No prompt configured for doc_type={document.doc_type!r}")
+
+    non_specialized = [p for p in candidates if "glm" not in p.id.lower()]
+    return (non_specialized or candidates)[0].id
+
 
 
 def _parse_json(text: str) -> dict:
@@ -124,11 +163,18 @@ def run_extraction(
 
 def run_batch_extraction(
     document_ids: list[str],
-    schema_id: str,
-    prompt_id: str,
+    schema_id: str | None,
+    prompt_id: str | None,
     model_ids: list[str],
     progress_callback=None,
 ) -> list[Result]:
+    """
+    Run extraction for the cartesian product of documents × models.
+
+    When preferred schema/prompt doc_type does not match a document, the first
+    matching schema/prompt for that document's doc_type is used automatically.
+    This allows mixed-type document suites in a single batch.
+    """
     total = len(document_ids) * len(model_ids)
     results = []
     step = 0
@@ -137,6 +183,9 @@ def run_batch_extraction(
             step += 1
             if progress_callback:
                 progress_callback(step, total, model_id, document_id)
-            result = run_extraction(document_id, schema_id, prompt_id, model_id)
+            resolved_schema = resolve_schema_id(document_id, schema_id)
+            resolved_prompt = resolve_prompt_id(document_id, prompt_id)
+            result = run_extraction(document_id, resolved_schema, resolved_prompt, model_id)
             results.append(result)
     return results
+

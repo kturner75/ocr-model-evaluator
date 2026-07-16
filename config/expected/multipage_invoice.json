@@ -1,0 +1,109 @@
+{
+  "document_id": "multipage_invoice",
+  "schema_id": "invoice",
+  "expected": {
+    "invoice_number": "INV-2048",
+    "invoice_date": "2024-06-03",
+    "due_date": "2024-07-03",
+    "vendor_name": "Northwind Industrial Supply",
+    "vendor_address": "890 Harbor Blvd, Building C, Seattle, WA 98101",
+    "bill_to_name": "Pacific Assembly Co",
+    "bill_to_address": "2200 Plant Road, Portland, OR 97201",
+    "line_items": [
+      {
+        "description": "Steel Bracket Type A",
+        "quantity": 40,
+        "unit_price": 12.5,
+        "amount": 500.0
+      },
+      {
+        "description": "Steel Bracket Type B",
+        "quantity": 25,
+        "unit_price": 18.0,
+        "amount": 450.0
+      },
+      {
+        "description": "Hex Bolts M8 (box of 100)",
+        "quantity": 12,
+        "unit_price": 22.0,
+        "amount": 264.0
+      },
+      {
+        "description": "Washers Assorted Kit",
+        "quantity": 8,
+        "unit_price": 15.75,
+        "amount": 126.0
+      },
+      {
+        "description": "Industrial Lubricant 5L",
+        "quantity": 6,
+        "unit_price": 48.0,
+        "amount": 288.0
+      },
+      {
+        "description": "Safety Gloves (pair)",
+        "quantity": 50,
+        "unit_price": 4.25,
+        "amount": 212.5
+      },
+      {
+        "description": "Cable Ties 300mm (pack)",
+        "quantity": 30,
+        "unit_price": 6.5,
+        "amount": 195.0
+      },
+      {
+        "description": "Wire Loom 10m",
+        "quantity": 15,
+        "unit_price": 9.9,
+        "amount": 148.5
+      },
+      {
+        "description": "Junction Box IP65",
+        "quantity": 20,
+        "unit_price": 14.0,
+        "amount": 280.0
+      },
+      {
+        "description": "DIN Rail 1m",
+        "quantity": 18,
+        "unit_price": 7.25,
+        "amount": 130.5
+      },
+      {
+        "description": "Terminal Block 12-way",
+        "quantity": 24,
+        "unit_price": 11.0,
+        "amount": 264.0
+      },
+      {
+        "description": "Contactor 24V Coil",
+        "quantity": 4,
+        "unit_price": 85.0,
+        "amount": 340.0
+      },
+      {
+        "description": "Thermal Overload Relay",
+        "quantity": 4,
+        "unit_price": 62.5,
+        "amount": 250.0
+      },
+      {
+        "description": "Emergency Stop Button",
+        "quantity": 10,
+        "unit_price": 19.95,
+        "amount": 199.5
+      },
+      {
+        "description": "Site Installation Labor",
+        "quantity": 16,
+        "unit_price": 95.0,
+        "amount": 1520.0
+      }
+    ],
+    "subtotal": 5168.0,
+    "tax_rate": 8.25,
+    "tax_amount": 426.36,
+    "total": 5594.36
+  }
+}

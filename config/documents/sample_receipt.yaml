@@ -1,0 +1,5 @@
+id: sample_receipt
+name: Sample Grocery Receipt
+doc_type: receipt
+file_path: documents/sample_receipt.pdf
+description: Narrow retail receipt layout with payment method and tax

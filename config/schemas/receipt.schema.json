@@ -1,0 +1,36 @@
+{
+  "id": "receipt",
+  "name": "Receipt Schema",
+  "doc_type": "receipt",
+  "description": "Retail receipt extraction schema",
+  "json_schema": {
+    "type": "object",
+    "properties": {
+      "merchant_name": {"type": "string"},
+      "merchant_address": {"type": "string"},
+      "receipt_number": {"type": "string"},
+      "transaction_date": {"type": "string"},
+      "transaction_time": {"type": "string"},
+      "cashier_id": {"type": "string"},
+      "payment_method": {"type": "string"},
+      "line_items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "description": {"type": "string"},
+            "quantity": {"type": "number"},
+            "unit_price": {"type": "number"},
+            "amount": {"type": "number"}
+          },
+          "required": ["description", "quantity", "unit_price", "amount"]
+        }
+      },
+      "subtotal": {"type": "number"},
+      "tax_rate": {"type": "number"},
+      "tax_amount": {"type": "number"},
+      "total": {"type": "number"}
+    },
+    "required": ["merchant_name", "receipt_number", "transaction_date", "line_items", "total"]
+  }
+}

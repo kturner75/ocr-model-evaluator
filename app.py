@@ -19,7 +19,7 @@ from ocr_eval.models.db import (
 )
 from ocr_eval.models.domain import MISSING
 from ocr_eval.pipeline.extractor import run_batch_extraction, run_extraction
-from ocr_eval.sample.generate_invoice import generate_all_sample_data
+from ocr_eval.sample.generate_all import generate_all_sample_data, list_sample_document_ids
 from ocr_eval.stores.document_store import list_documents
 from ocr_eval.stores.expected_store import get_expected
 from ocr_eval.stores.model_store import list_models
@@ -34,8 +34,10 @@ st.title("OCR Model Evaluator")
 with st.sidebar:
     if st.button("Generate Sample Data", use_container_width=True):
         path = generate_all_sample_data()
-        st.success(f"Sample data generated: {path.name}")
+        ids = list_sample_document_ids()
+        st.success(f"Generated {len(ids)} sample documents (incl. {path.name})")
         st.rerun()
+
 
     st.divider()
 
@@ -146,7 +148,7 @@ with tab_run:
 
         selected_docs = st.multiselect(
             "Documents", documents, default=documents,
-            format_func=lambda d: d.name,
+            format_func=lambda d: f"{d.name} ({d.doc_type})",
         )
 
         filtered_doc_types = set(d.doc_type for d in selected_docs) if selected_docs else set()
@@ -155,13 +157,30 @@ with tab_run:
         if not filtered_schemas:
             st.warning("No schemas match selected document types")
             st.stop()
-        selected_schema = st.selectbox("Schema", filtered_schemas, format_func=lambda s: s.name)
+        selected_schema = st.selectbox(
+            "Preferred schema",
+            filtered_schemas,
+            format_func=lambda s: f"{s.name} ({s.doc_type})",
+            help="Used when it matches a document's type. Mixed batches auto-pick a schema per document type.",
+        )
 
         filtered_prompts = [p for p in prompts if p.doc_type in filtered_doc_types]
         if not filtered_prompts:
             st.warning("No prompts match selected document types")
             st.stop()
-        selected_prompt = st.selectbox("Prompt", filtered_prompts, format_func=lambda p: p.name)
+        selected_prompt = st.selectbox(
+            "Preferred prompt",
+            filtered_prompts,
+            format_func=lambda p: f"{p.name} ({p.doc_type})",
+            help="Used when it matches a document's type. Mixed batches auto-pick a prompt per document type.",
+        )
+
+        if len(filtered_doc_types) > 1:
+            st.caption(
+                "Multiple document types selected — each run uses the schema/prompt "
+                "matching that document's type."
+            )
+
 
         if not models:
             st.warning("No models configured.")

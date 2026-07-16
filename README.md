@@ -41,7 +41,7 @@ cp .env.example .env
 streamlit run app.py
 ```
 
-On first launch, click **Generate Sample Data** in the sidebar to create a sample invoice PDF with ground truth assertions. Then select documents, models, and click **Run Extraction**.
+On first launch, click **Generate Sample Data** in the sidebar to create the sample document suite (invoice, multi-page invoice, receipt, purchase order) with ground truth assertions. Then select documents, models, and click **Run Extraction**. Mixed document types in one batch automatically use the matching schema and prompt per type.
 
 ## Dashboard Tabs
 

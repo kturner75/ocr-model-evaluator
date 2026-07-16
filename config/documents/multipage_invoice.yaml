@@ -1,0 +1,5 @@
+id: multipage_invoice
+name: 'Multi-page Invoice #2048'
+doc_type: invoice
+file_path: documents/multipage_invoice.pdf
+description: Multi-page industrial invoice; line items span pages
